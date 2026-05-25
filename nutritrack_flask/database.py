@@ -5,13 +5,17 @@
 # can import the same `db` object without reconnecting.
 
 from pymongo import MongoClient
+from pymongo.errors import ConfigurationError
 from config import Config
 
 # Connect to MongoDB
 client = MongoClient(Config.MONGO_URI)
 
 # Select the database
-db = client.get_database()
+try:
+    db = client.get_database()
+except ConfigurationError:
+    db = client.get_database("nutritrack_advanced")
 
 # ── Collections ───────────────────────────────────────────────
 # db.users   → user profiles (name, birthdate, height, weight)
